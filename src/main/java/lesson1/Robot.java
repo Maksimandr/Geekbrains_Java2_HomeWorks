@@ -5,18 +5,18 @@ package lesson1;
  */
 public class Robot implements Passable {
 
-    private String model; // модель
+    private String name; // модель
     private int runLimitValue; // предел для бега
     private int jumpLimitValue; // предел для прыжка
 
-    public Robot(String model, int runLimitValue, int jumpLimitValue) {
-        this.model = model;
+    public Robot(String name, int runLimitValue, int jumpLimitValue) {
+        this.name = name;
         this.runLimitValue = runLimitValue;
         this.jumpLimitValue = jumpLimitValue;
     }
 
-    public String getModel() {
-        return model;
+    public String getName() {
+        return name;
     }
 
     public int getRunLimitValue() {
@@ -29,21 +29,11 @@ public class Robot implements Passable {
 
     @Override
     public boolean run(Obstacle obstacle) {
-        if (isPassable(runLimitValue, obstacle.obstacleSize())) {
-            System.out.println(model + " пробежал препятствие (" + obstacle.getObstacleType().getFullName() + ") длинной " + obstacle.obstacleSize() + ". (максимальная дистанция бега = " + runLimitValue + ")");
-            return true;
-        }
-        System.out.println(model + " НЕ СМОГ пробежать препятствие длиной " + obstacle.obstacleSize() + ". (максимальная дистанция бега = " + runLimitValue + ")");
-        return false;
+        return printResultForRun(name, obstacle, runLimitValue);
     }
 
     @Override
     public boolean jump(Obstacle obstacle) {
-        if (isPassable(jumpLimitValue, obstacle.obstacleSize())) {
-            System.out.println(model + " перепрыгнул препятствие (" + obstacle.getObstacleType().getFullName() + ") высотой " + obstacle.obstacleSize() + ". (максимальная высота прыжка = " + jumpLimitValue + ")");
-            return true;
-        }
-        System.out.println(model + " НЕ СМОГ перепрыгнуть препятствие высотой " + obstacle.obstacleSize() + ". (максимальная высота прыжка = " + jumpLimitValue + ")");
-        return false;
+        return printResultForJump(name, obstacle, jumpLimitValue);
     }
 }

@@ -26,7 +26,8 @@ public class HomeWorkApp1 {
         Passable[] participants = new Passable[maxParticipants];
         Obstacle[] obstacles = new Obstacle[maxQuantityOfObstacles];
 
-        for (int i = 0; i < maxParticipants; i++) { // заполняем массив участников случайным набором разных типов
+        // заполняем массив участников случайным набором разных типов
+        for (int i = 0; i < maxParticipants; i++) {
             switch (random.nextInt(maxTypesOfParticipants)) {
                 case 0: {
                     participants[i] = new Human("Человек №" + i, random.nextInt(ObstaclesTypes.TREADMILL.getMaxSize()), random.nextInt(ObstaclesTypes.WALL.getMaxSize()));
@@ -42,31 +43,27 @@ public class HomeWorkApp1 {
             }
         }
 
-        for (int i = 0; i < maxQuantityOfObstacles; i++) { // заполняем массив препятствий случайным набором разных типов
+        // заполняем массив препятствий случайным набором разных типов
+        for (int i = 0; i < maxQuantityOfObstacles; i++) {
             switch (random.nextInt(ObstaclesTypes.values().length)) {
                 case 0: {
-                    obstacles[i] = new Treadmill(random.nextInt(ObstaclesTypes.TREADMILL.getMaxSize() - 900)); // специально для удобства тестирования уменьшил, чтобы чаще выпадали малые значения длины
+                    obstacles[i] = new Treadmill(random.nextInt(ObstaclesTypes.TREADMILL.getMaxSize() - 700)); // специально для удобства тестирования уменьшил, чтобы чаще выпадали малые значения длины
                     break;
                 }
                 default: {
-                    obstacles[i] = new Wall(random.nextInt(ObstaclesTypes.WALL.getMaxSize() - 90)); // специально для удобства тестирования уменьшил, чтобы чаще выпадали малые значения высоты
+                    obstacles[i] = new Wall(random.nextInt(ObstaclesTypes.WALL.getMaxSize() - 70)); // специально для удобства тестирования уменьшил, чтобы чаще выпадали малые значения высоты
                 }
             }
         }
 
+        // прогоняем участников через полосу препятствий
         for (int i = 0; i < maxParticipants; i++) {
             for (int j = 0; j < maxQuantityOfObstacles; j++) {
-                if (obstacles[j].getObstacleType() == ObstaclesTypes.TREADMILL) {
-                    if (!participants[i].run(obstacles[j])) { // если препятствие не преодолено участник завершает прохождение
-                        break;
-                    }
-                } else if (obstacles[j].getObstacleType() == ObstaclesTypes.WALL) {
-                    if (!participants[i].jump(obstacles[j])) { // если препятствие не преодолено участник завершает прохождение
-                        break;
-                    }
+                if (!participants[i].passAnObstacle(obstacles[j])) {
+                    break; // если препятствие не преодолено участник снимается с пробега
                 }
             }
-            System.out.println();
+            System.out.println(); // отделяем вывод следующего участника
         }
     }
 }
