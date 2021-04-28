@@ -33,11 +33,7 @@ public interface Passable {
      * @return
      */
     default boolean isPassable(int limitValue, int obstacleValue) {
-        if (limitValue < obstacleValue) {
-            return false;
-        } else {
-            return true;
-        }
+        return limitValue >= obstacleValue;
     }
 
     /**
