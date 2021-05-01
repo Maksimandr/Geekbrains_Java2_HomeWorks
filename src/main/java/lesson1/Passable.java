@@ -17,13 +17,13 @@ public interface Passable {
      */
     default boolean passAnObstacle(Obstacle obstacle) {
 
-        if (obstacle.getObstacleType() == ObstaclesTypes.TREADMILL) {
-            return this.run(obstacle); // по беговой дорожке бежим
-        } else if (obstacle.getObstacleType() == ObstaclesTypes.WALL) {
-            return this.jump(obstacle); // через стену прыгаем
-        } else {
-            throw new IllegalArgumentException("Неизвестный тип препятствия."); // такого по идее не должно случаться, но пусть будет :)
-        }
+        return switch (obstacle.getObstacleType()) {
+            case TREADMILL -> this.run(obstacle); // по беговой дорожке бежим
+
+            case WALL -> this.jump(obstacle); // через стену прыгаем
+
+            default -> throw new IllegalArgumentException("Неизвестный тип препятствия."); // такого по идее не должно случаться, но пусть будет :)
+        };
     }
 
     /**
