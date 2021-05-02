@@ -48,7 +48,7 @@ public class HomeWorkApp2 {
 
         // считаем и выводим в консоль сумму элементов массива, обрабатываем возможные исключения
         try {
-            System.out.println("Сумма равна " + myArraySum(myArray1));
+            System.out.println("Сумма равна " + myArraySum(myArray4));
         } catch (MyArraySizeException e) {
             System.out.println("Упс, что-то пошло не так.");
             e.printStackTrace();
@@ -69,7 +69,7 @@ public class HomeWorkApp2 {
     public static int myArraySum(String[][] array) throws MyArraySizeException, MyArrayDataException {
 
         if (!isSquare(array, ARRAY_SIZE)) {
-            throw new MyArraySizeException("Аргументом может быть только двумерный строковый массив размером 4х4");
+            throw new MyArraySizeException("Аргументом может быть только двумерный строковый массив размером " + ARRAY_SIZE + "х" + ARRAY_SIZE);
         }
 
         int sum = 0;
@@ -85,9 +85,10 @@ public class HomeWorkApp2 {
         return sum;
     }
 
-     /**
+    /**
      * Проверяет что массив квадратный
-     * @param arr обрабатываемый массив
+     *
+     * @param arr  обрабатываемый массив
      * @param size требуемый размер массива
      * @return true - квадратный
      */
