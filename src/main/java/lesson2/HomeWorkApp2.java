@@ -68,7 +68,7 @@ public class HomeWorkApp2 {
      */
     public static int myArraySum(String[][] array) throws MyArraySizeException, MyArrayDataException {
 
-        if (!isSquare(array)) {
+        if (!isSquare(array, ARRAY_SIZE)) {
             throw new MyArraySizeException("Аргументом может быть только двумерный строковый массив размером 4х4");
         }
 
@@ -85,18 +85,18 @@ public class HomeWorkApp2 {
         return sum;
     }
 
-    /**
+     /**
      * Проверяет что массив квадратный
-     *
      * @param arr обрабатываемый массив
+     * @param size требуемый размер массива
      * @return true - квадратный
      */
-    public static boolean isSquare(String[][] arr) {
-        if (arr.length != ARRAY_SIZE) {
+    public static boolean isSquare(String[][] arr, int size) {
+        if (arr.length != size) {
             return false;
         }
         for (int i = 0; i < arr.length; i++) {
-            if (arr[i].length != ARRAY_SIZE) {
+            if (arr[i].length != size) {
                 return false;
             }
         }
