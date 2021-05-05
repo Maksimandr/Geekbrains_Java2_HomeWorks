@@ -1,6 +1,7 @@
 package lesson3;
 
 import java.util.*;
+import java.util.function.BiFunction;
 
 /**
  * 1. Создать массив с набором слов (10-20 слов, должны встречаться повторяющиеся). Найти и вывести список уникальных
@@ -19,20 +20,48 @@ public class HomeWorkApp3 {
     public static void main(String[] args) {
 
         String[] strings = new String[]{"Создать", "массив", "с", "набором", "слов", "Найти", "и", "вывести",
-                "список", "уникальных", "слов", "из", "которых", "состоит", "массив"};
+                "список", "уникальных", "слов", "из", "которых", "состоит", "массив", "массив"};
 
         System.out.println(Arrays.toString(strings));
         System.out.println(strings.length);
 
-        uniqueArrayOne(strings);
+        uniqueArray(strings);
     }
 
-    public static void uniqueArrayOne(String[] strings) {
-        // пришлось поискать метод который из массива делает коллекцию
-        List<String> stringArrayList = new ArrayList<>(Arrays.asList(strings));
-        Set<String> stringHashSet = new HashSet<>(stringArrayList);
-        System.out.println(stringHashSet);
-        System.out.println(stringHashSet.size());
+    public static void uniqueArray(String[] strings) {
+
+        Map<String, Integer> stringIntegerMap = new HashMap();
+
+        // сначала сделал так
+//        for (String s: strings) {
+//            Integer value = stringIntegerMap.get(s);
+//            if (value == null) {
+//                stringIntegerMap.put(s, 1);
+//            } else {
+//                stringIntegerMap.put(s, ++value);
+//            }
+//        }
+
+        // потом решил посмотреть, как можно сделать проще. Нашел метод merge.
+        // Не сразу, но разобрался как работает BiFunction.apply (что для него является аргументами).
+//        for (String s : strings) {
+//            stringIntegerMap.merge(s, 1, new BiFunction<Integer, Integer, Integer>() {
+//                @Override
+//                public Integer apply(Integer oldValue, Integer value) {
+//                    return oldValue + value;
+//                    // в нашем случае можно сделать и так
+//                    // return ++oldValue;
+//                }
+//            });
+//        }
+
+        // а потом нашел в интернете способ как это снабдить синтаксическим сахаром :)
+        for (String s : strings) {
+            stringIntegerMap.merge(s, 1, Integer::sum);
+        }
+
+        System.out.println(stringIntegerMap);
+        System.out.println(stringIntegerMap.size());
     }
 
 }
