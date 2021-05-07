@@ -50,10 +50,10 @@ public class HomeWorkApp2 {
         try {
             System.out.println("Сумма равна " + myArraySum(myArray4));
         } catch (MyArraySizeException e) {
-            System.out.println("Упс, что-то пошло не так.");
+            // как-то обрабатываем MyArraySizeException
             e.printStackTrace();
         } catch (MyArrayDataException e) {
-            System.out.println("Упс, снова что-то пошло не так.");
+            // как-то обрабатываем MyArrayDataException
             e.printStackTrace();
         }
     }
@@ -66,10 +66,10 @@ public class HomeWorkApp2 {
      * @throws MyArraySizeException если массив не квадратный с размером ARRAY_SIZE
      * @throws MyArrayDataException если в ячейке массива не число типа int
      */
-    public static int myArraySum(String[][] array) throws MyArraySizeException, MyArrayDataException {
+    public static int myArraySum(String[][] array) {
 
         if (!isSquare(array, ARRAY_SIZE)) {
-            throw new MyArraySizeException("Аргументом может быть только двумерный строковый массив размером " + ARRAY_SIZE + "х" + ARRAY_SIZE);
+            throw new MyArraySizeException(ARRAY_SIZE, ARRAY_SIZE);
         }
 
         int sum = 0;
@@ -78,7 +78,7 @@ public class HomeWorkApp2 {
                 try {
                     sum += Integer.parseInt(array[i][j]);
                 } catch (NumberFormatException e) {
-                    throw new MyArrayDataException("В ячейке массива с индексом [" + i + "][" + j + "] неверный формат данных. ", e);
+                    throw new MyArrayDataException(i, j, e);
                 }
             }
         }
@@ -86,7 +86,7 @@ public class HomeWorkApp2 {
     }
 
     /**
-     * Проверяет что массив квадратный
+     * Проверяет, что массив квадратный
      *
      * @param arr  обрабатываемый массив
      * @param size требуемый размер массива
