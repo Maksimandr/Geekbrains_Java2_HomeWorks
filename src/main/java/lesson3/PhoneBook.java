@@ -17,7 +17,7 @@ public class PhoneBook {
 
     // выбрал в Map HashSet для того, чтобы исключить варианты когда у одной фамилии есть несколько одинаковых номеров,
     // если такие варианты не нужно отсекать, то нужно использовать ArrayList
-    private Map<String, HashSet<String>> phoneBook;
+    private Map<String, Set<String>> phoneBook;
 
     public PhoneBook() {
         this.phoneBook = new HashMap<>();
@@ -43,8 +43,8 @@ public class PhoneBook {
 //        if (phoneBook.containsKey(lastname)) {
 //            return phoneBook.get(lastname);
 //        }
-//        return null;
-        return phoneBook.getOrDefault(lastname, null);
+//        return Collections.emptySet();
+        return phoneBook.getOrDefault(lastname, Collections.emptySet());
     }
 
     @Override
@@ -80,7 +80,7 @@ public class PhoneBook {
         System.out.println(phoneBook.get("Egorov"));
         // у Sidorov будет один номер (при реализации через Set)
         System.out.println(phoneBook.get("Sidorov"));
-        // у Doe вывод равен null
+        // у Doe вывод равен пустому списку
         System.out.println(phoneBook.get("Doe"));
     }
 }

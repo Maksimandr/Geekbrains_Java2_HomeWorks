@@ -1,6 +1,7 @@
 package lesson3;
 
 import java.util.*;
+import java.util.function.BiFunction;
 
 /**
  * 1. Создать массив с набором слов (10-20 слов, должны встречаться повторяющиеся). Найти и вывести список уникальных
@@ -46,21 +47,20 @@ public class HomeWorkApp3 {
         // потом решил посмотреть, как можно сделать проще. Нашел метод merge.
         // Не сразу, но разобрался как работает BiFunction.apply (что для него является аргументами).
 //        for (String s : strings) {
-//            stringIntegerMap.merge(s, 1, new BiFunction<Integer, Integer, Integer>() {
-//                @Override
-//                public Integer apply(Integer oldValue, Integer value) {
-//                    return oldValue + value;
-//                    // в нашем случае можно сделать и так
-//                    // return ++oldValue;
-//                }
-//            });
+//            stringIntegerMap.merge(s, 1, (oldValue, newValue) -> oldValue + newValue);
 //        }
 
         // а потом нашел в интернете способ, как это снабдить синтаксическим сахаром :)
         // правда пока не уверен, что на 100% понимаю, как эта запись работает Integer::sum
+//        for (String s : strings) {
+//            stringIntegerMap.merge(s, 1, Integer::sum);
+//        }
+
+//        А еще можно
         for (String s : strings) {
-            stringIntegerMap.merge(s, 1, Integer::sum);
+            stringIntegerMap.put(s, stringIntegerMap.getOrDefault(s, 0) + 1);
         }
+
         return stringIntegerMap;
     }
 }
