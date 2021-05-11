@@ -24,19 +24,19 @@ public class HomeWorkApp5 {
 
     public static void main(String[] args) throws InterruptedException {
         firstMethod(); // время вычислений равно 1010 - 1040
-        secondMethod(); // время вычислений равно 480 - 520
+        secondMethod(); // время вычислений равно 490 - 520
     }
 
     public static void firstMethod() {
         // создаем массив и заполняем единицами
         float[] arr = new float[SIZE];
-        for (int i = 0; i < SIZE; i++) {
+        for (int i = 0; i < arr.length; i++) {
             arr[i] = 1;
         }
         // засекаем время1
         long t1 = System.currentTimeMillis();
         // считаем новые значения массива
-        for (int i = 0; i < SIZE; i++) {
+        for (int i = 0; i < arr.length; i++) {
             arr[i] = (float) (arr[i] * Math.sin(0.2f + i / 5) * Math.cos(0.2f + i / 5) * Math.cos(0.4f + i / 2));
             ;
         }
@@ -51,7 +51,7 @@ public class HomeWorkApp5 {
         float[] arr = new float[SIZE];
         float[] arr1 = new float[HALF];
         float[] arr2 = new float[HALF];
-        for (int i = 0; i < SIZE; i++) {
+        for (int i = 0; i < arr.length; i++) {
             arr[i] = 1;
         }
         // засекаем время1
@@ -63,7 +63,7 @@ public class HomeWorkApp5 {
         Thread thread1 = new Thread(new Runnable() {
             @Override
             public void run() {
-                for (int i = 0; i < HALF; i++) {
+                for (int i = 0; i < arr1.length; i++) {
                     arr1[i] = (float) (arr1[i] * Math.sin(0.2f + i / 5) * Math.cos(0.2f + i / 5) * Math.cos(0.4f + i / 2));
                     ;
                 }
@@ -72,7 +72,7 @@ public class HomeWorkApp5 {
         Thread thread2 = new Thread(new Runnable() {
             @Override
             public void run() {
-                for (int i = 0; i < HALF; i++) {
+                for (int i = 0; i < arr2.length; i++) {
                     arr2[i] = (float) (arr2[i] * Math.sin(0.2f + i / 5) * Math.cos(0.2f + i / 5) * Math.cos(0.4f + i / 2));
                     ;
                 }
