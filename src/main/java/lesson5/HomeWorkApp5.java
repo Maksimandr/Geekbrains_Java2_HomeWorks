@@ -1,5 +1,7 @@
 package lesson5;
 
+import java.util.Arrays;
+
 /**
  * Необходимо написать два метода, которые делают следующее:
  * 1) Создают одномерный длинный массив
@@ -30,9 +32,7 @@ public class HomeWorkApp5 {
     public static void firstMethod() {
         // создаем массив и заполняем единицами
         float[] arr = new float[SIZE];
-        for (int i = 0; i < arr.length; i++) {
-            arr[i] = 1;
-        }
+        Arrays.fill(arr, 1);
         // засекаем время1
         long t1 = System.currentTimeMillis();
         // считаем новые значения массива
@@ -51,31 +51,30 @@ public class HomeWorkApp5 {
         float[] arr = new float[SIZE];
         float[] arr1 = new float[HALF];
         float[] arr2 = new float[HALF];
-        for (int i = 0; i < arr.length; i++) {
-            arr[i] = 1;
-        }
+        Arrays.fill(arr, 1);
         // засекаем время1
         long t1 = System.currentTimeMillis();
-        // разбиваем массив на два
-        System.arraycopy(arr, 0, arr1, 0, HALF);
-        System.arraycopy(arr, HALF, arr2, 0, HALF);
         // создаем два потока для вычислений
         Thread thread1 = new Thread(new Runnable() {
             @Override
             public void run() {
+                System.arraycopy(arr, 0, arr1, 0, HALF);
                 for (int i = 0; i < arr1.length; i++) {
                     arr1[i] = (float) (arr1[i] * Math.sin(0.2f + i / 5) * Math.cos(0.2f + i / 5) * Math.cos(0.4f + i / 2));
                     ;
                 }
+                System.arraycopy(arr1, 0, arr, 0, HALF);
             }
         });
         Thread thread2 = new Thread(new Runnable() {
             @Override
             public void run() {
+                System.arraycopy(arr, HALF, arr2, 0, HALF);
                 for (int i = 0; i < arr2.length; i++) {
                     arr2[i] = (float) (arr2[i] * Math.sin(0.2f + i / 5) * Math.cos(0.2f + i / 5) * Math.cos(0.4f + i / 2));
                     ;
                 }
+                System.arraycopy(arr2, 0, arr, HALF, HALF);
             }
         });
         // запускаем потоки
@@ -84,9 +83,6 @@ public class HomeWorkApp5 {
         // ждем их выполнения
         thread1.join();
         thread2.join();
-        // склеиваем массив
-        System.arraycopy(arr1, 0, arr, 0, HALF);
-        System.arraycopy(arr2, 0, arr, HALF, HALF);
         // засекаем время2
         long t2 = System.currentTimeMillis();
         // выводим время выполнения
