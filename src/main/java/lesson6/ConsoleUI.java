@@ -8,14 +8,18 @@ import java.util.Scanner;
 
 public class ConsoleUI {
 
+    private String name;
     private Scanner scanner;
+    private Socket socket;
     private DataInputStream inputStream;
     private DataOutputStream outputStream;
 
     private Thread threadIn;
     private Thread threadOut;
 
-    public ConsoleUI(Socket socket) {
+    public ConsoleUI(Socket sock, String string) {
+        name = string;
+        socket = sock;
         scanner = new Scanner(System.in);
         try {
             inputStream = new DataInputStream(socket.getInputStream());
@@ -26,26 +30,35 @@ public class ConsoleUI {
 
         threadIn = new Thread(() -> {
             try {
+                String mesasgeFromSrv;
                 while (true) {
-                    String string = inputStream.readUTF();
-                    System.out.println(string);
-                    if (string.equalsIgnoreCase(ConsoleChatConstants.POISON_PILL)) {
+                    mesasgeFromSrv = inputStream.readUTF();
+                    System.out.println(mesasgeFromSrv);
+                    if (mesasgeFromSrv.equalsIgnoreCase(ConsoleChatConstants.POISON_PILL)) {
                         break;
                     }
                 }
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            close(socket);
-            Thread.currentThread().interrupt();
+            threadOut.interrupt();
+            close();
         });
         threadIn.start();
 
         threadOut = new Thread(() -> {
             try {
-                while (!socket.isClosed()) {
-                    String messageFromUser = scanner.nextLine();
-                    outputStream.writeUTF(messageFromUser);
+                String messageFromUser = "";
+                while (true) {
+                    try {
+                        messageFromUser = scanner.nextLine();
+                    } catch (IllegalStateException e) {
+                        e.printStackTrace();
+                        break;
+                    }
+                    if (!socket.isClosed()) {
+                        outputStream.writeUTF(messageFromUser);
+                    }
                     if (messageFromUser.equalsIgnoreCase(ConsoleChatConstants.POISON_PILL)) {
                         break;
                     }
@@ -54,18 +67,13 @@ public class ConsoleUI {
                 e.printStackTrace();
             }
             threadIn.interrupt();
-            try {
-                threadIn.join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            close(socket);
-            Thread.currentThread().interrupt();
+            close();
         });
         threadOut.start();
     }
 
-    private void close(Socket socket) {
+    private void close() {
+        System.out.println(name + " shutting down");
         scanner.close();
         try {
             inputStream.close();

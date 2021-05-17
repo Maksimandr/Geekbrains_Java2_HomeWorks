@@ -6,6 +6,6 @@ public class ConsoleChatConstants {
 
     public static final String HOST = "localhost";
 
-    public static final String POISON_PILL = "end";
+    public static final String POISON_PILL = "/end";
 
 }

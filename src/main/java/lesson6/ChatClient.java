@@ -18,7 +18,7 @@ public class ChatClient {
     public ChatClient() {
         try {
             Socket socket = new Socket(ConsoleChatConstants.HOST, ConsoleChatConstants.PORT);
-            new ConsoleUI(socket);
+            new ConsoleUI(socket, "Client");
         } catch (IOException e) {
             e.printStackTrace();
         }
