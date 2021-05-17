@@ -6,6 +6,9 @@ import java.io.IOException;
 import java.net.Socket;
 import java.util.Scanner;
 
+/**
+ * Класс для работы чата c консольным интерфейсом
+ */
 public class ConsoleUI {
 
     private String name;
@@ -18,7 +21,7 @@ public class ConsoleUI {
     private Thread threadOut;
 
     public ConsoleUI(Socket sock, String string) {
-        name = string;
+        name = string; // клиент или сервер
         socket = sock;
         scanner = new Scanner(System.in);
         try {
@@ -28,37 +31,38 @@ public class ConsoleUI {
             e.printStackTrace();
         }
 
+//        поток для считывания сообщений от сервера
         threadIn = new Thread(() -> {
             try {
-                String mesasgeFromSrv;
+                String messageFromSrv;
                 while (true) {
-                    mesasgeFromSrv = inputStream.readUTF();
-                    System.out.println(mesasgeFromSrv);
-                    if (mesasgeFromSrv.equalsIgnoreCase(ConsoleChatConstants.POISON_PILL)) {
+                    messageFromSrv = inputStream.readUTF();
+                    System.out.println(messageFromSrv);
+                    if (messageFromSrv.equalsIgnoreCase(ConsoleChatConstants.POISON_PILL)) {
                         break;
                     }
                 }
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            threadOut.interrupt();
-            close();
+            threadOut.interrupt(); // эта штука не работает :(
+            closeConnections();
         });
         threadIn.start();
 
+//        поток для считывания сообщений от пользователя из консоли
         threadOut = new Thread(() -> {
             try {
-                String messageFromUser = "";
+                String messageFromUser;
                 while (true) {
+                    // на случай если сканер уже закрыт другим потоком
                     try {
                         messageFromUser = scanner.nextLine();
                     } catch (IllegalStateException e) {
                         e.printStackTrace();
                         break;
                     }
-                    if (!socket.isClosed()) {
-                        outputStream.writeUTF(messageFromUser);
-                    }
+                    outputStream.writeUTF(messageFromUser);
                     if (messageFromUser.equalsIgnoreCase(ConsoleChatConstants.POISON_PILL)) {
                         break;
                     }
@@ -66,13 +70,13 @@ public class ConsoleUI {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            threadIn.interrupt();
-            close();
+            threadIn.interrupt(); // эта штука не работает :(
+            closeConnections();
         });
         threadOut.start();
     }
 
-    private void close() {
+    private void closeConnections() {
         System.out.println(name + " shutting down");
         scanner.close();
         try {
