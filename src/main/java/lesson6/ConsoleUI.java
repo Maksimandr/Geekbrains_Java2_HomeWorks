@@ -77,7 +77,9 @@ public class ConsoleUI {
     }
 
     private void closeConnections() {
-        System.out.println(name + " shutting down");
+        if (!socket.isClosed()) {
+            System.out.println(name + " shutting down");
+        }
         scanner.close();
         try {
             inputStream.close();
