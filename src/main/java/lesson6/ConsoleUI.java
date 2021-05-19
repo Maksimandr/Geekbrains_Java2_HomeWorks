@@ -62,7 +62,7 @@ public class ConsoleUI {
                         e.printStackTrace();
                         break;
                     }
-                    outputStream.writeUTF(messageFromUser);
+                    outputStream.writeUTF(name+ ": " + messageFromUser);
                     if (messageFromUser.equalsIgnoreCase(ConsoleChatConstants.POISON_PILL)) {
                         break;
                     }
