@@ -54,11 +54,9 @@ public class ClientHandler {
             if (messageFromClient.equals(ChatConstants.STOP_WORD)) {
                 return;
             } else if (messageFromClient.startsWith(ChatConstants.SEND_TO_LIST)) {
-                String[] splittedStr = messageFromClient.split("\\s+");
-                List<String> nicknames = new ArrayList<>();
-                for (int i = 1; i < splittedStr.length - 1; i++) {
-                    nicknames.add(splittedStr[i]);
-                }
+                server.broadcastMessageToClients(messageFromClient, name);
+            } else if (messageFromClient.startsWith(ChatConstants.PERSONAL_MSG)) {
+                server.personalMessage(messageFromClient, name);
             } else if (messageFromClient.startsWith(ChatConstants.CLIENTS_LIST)) {
                 server.broadcastClients();
             } else {
