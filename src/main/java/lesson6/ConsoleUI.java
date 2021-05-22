@@ -35,7 +35,7 @@ public class ConsoleUI {
         threadIn = new Thread(() -> {
             try {
                 String messageFromSrv;
-                while (true) {
+                while (!threadIn.isInterrupted()) {
                     messageFromSrv = inputStream.readUTF();
                     System.out.println(messageFromSrv);
                     if (messageFromSrv.equalsIgnoreCase(ConsoleChatConstants.POISON_PILL)) {
@@ -54,7 +54,7 @@ public class ConsoleUI {
         threadOut = new Thread(() -> {
             try {
                 String messageFromUser;
-                while (true) {
+                while (!threadOut.isInterrupted()) {
                     // на случай если сканер уже закрыт другим потоком
                     try {
                         messageFromUser = scanner.nextLine();
