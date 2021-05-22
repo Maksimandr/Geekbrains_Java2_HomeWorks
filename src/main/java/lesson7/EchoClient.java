@@ -137,6 +137,8 @@ public class EchoClient extends JFrame {
         if (!inputField.getText().trim().isEmpty()) {
             try {
                 outputStream.writeUTF(inputField.getText());
+                chatArea.append(inputField.getText());
+                chatArea.append("\n");
                 inputField.setText("");
                 inputField.grabFocus();
             } catch (IOException e) {

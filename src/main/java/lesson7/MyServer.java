@@ -107,11 +107,13 @@ public class MyServer {
      * @param nicknames список получателей сообщения
      */
     public synchronized void sendToGroup(List<String> splitMessage, String name, List<String> nicknames) {
-        StringBuilder message = new StringBuilder();
-        message.append("[").append(name).append("]:");
-        for (int i = nicknames.size() + 1; i < splitMessage.size(); i++) {
-            message.append(" ").append(splitMessage.get(i));
-        }
+//        сначала сделал так
+//        StringBuilder message = new StringBuilder();
+//        message.append("[").append(name).append("]:");
+//        for (int i = nicknames.size() + 1; i < splitMessage.size(); i++) {
+//            message.append(" ").append(splitMessage.get(i));
+//        }
+        String message = "[" + name + "]: " + splitMessage.stream().skip(nicknames.size() + 1).collect(Collectors.joining(" "));
         clients.stream()
                 .filter(c -> nicknames.contains(c.getName()))
                 .forEach(c -> c.sendMsg(message.toString()));
