@@ -40,7 +40,21 @@ public class ClientHandler {
                 } finally {
                     closeConnection();
                 }
-
+            }).start();
+            // поток закрывает соединение если вышел таймаут на подписку клиента
+            new Thread(() -> {
+                long timeOut = System.currentTimeMillis();
+                //на случай если поток проснётся раньше чем через 120 сек.
+                while (System.currentTimeMillis() - timeOut < ChatConstants.CLIENT_AUTH_TIMEOUT) {
+                    try {
+                        Thread.sleep(ChatConstants.CLIENT_AUTH_TIMEOUT);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (name.isEmpty()) {
+                    closeConnection();
+                }
             }).start();
         } catch (IOException ex) {
             System.out.println("Проблема при создании клиента");
