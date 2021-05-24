@@ -18,4 +18,6 @@ public class ChatConstants {
 
     public static final String CLIENTS_LIST = "/clients";
 
+    public static final long CLIENT_AUTH_TIMEOUT = 120_000;
+
 }
