@@ -44,16 +44,20 @@ public class ClientHandler {
             // поток закрывает соединение если вышел таймаут на подписку клиента
             new Thread(() -> {
                 long timeOut = System.currentTimeMillis();
-                //на случай если поток проснётся раньше чем через 120 сек.
-                while (System.currentTimeMillis() - timeOut < ChatConstants.CLIENT_AUTH_TIMEOUT) {
+                while (true) {
                     try {
-                        Thread.sleep(ChatConstants.CLIENT_AUTH_TIMEOUT);
+                        Thread.sleep(5000);
+                        //каждые 5 сек. проверяем авторизовался ли клиент, если да завершаем поток
+                        if (!name.isEmpty()) {
+                            break;
+                        } else if (System.currentTimeMillis() - timeOut > ChatConstants.CLIENT_AUTH_TIMEOUT) {
+                            //если клиент не авторизовался и прошло больше 120 сек. закрываем соединение и завершаем поток
+                            closeConnection();
+                            break;
+                        }
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                }
-                if (name.isEmpty()) {
-                    closeConnection();
                 }
             }).start();
         } catch (IOException ex) {

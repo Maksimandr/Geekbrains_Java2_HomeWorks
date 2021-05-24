@@ -76,21 +76,26 @@ public class MyServer {
 
     /**
      * Подготавливает отправку сообщения заданному списку клиентов
+     *
      * @param messageFromClient сообщение от клиента (структура "ChatConstants.SEND_TO_LIST nick1 ... nickN MESSAGE")
-     * @param name имя отправителя
+     * @param name              имя отправителя
      */
     public synchronized void broadcastMessageToClients(String messageFromClient, String name) {
         // разбиваем собщение на части
         List<String> splitMessage = Arrays.asList(messageFromClient.split("\\s+"));
         // пропускаем первое слово (/list) и берем подряд следующие слова из сообщения, пока они соответствуют никам (дальше остается само сообщение)
-        List<String> nicknames = splitMessage.stream().skip(1).takeWhile(word -> clients.stream().anyMatch(c -> c.getName().equals(word))).collect(Collectors.toList());
+        List<String> nicknames = splitMessage.stream()
+                .skip(1)
+                .takeWhile(word -> clients.stream().anyMatch(c -> c.getName().equals(word)))
+                .collect(Collectors.toList());
         sendToGroup(splitMessage, name, nicknames);
     }
 
     /**
      * Подготавливает отправку персонального сообщения (по сути упрощенная версия метода broadcastMessageToClients)
+     *
      * @param messageFromClient сообщение от клиента (структура "ChatConstants.PERSONAL_MSG nick MESSAGE")
-     * @param name имя отправителя
+     * @param name              имя отправителя
      */
     public synchronized void personalMessage(String messageFromClient, String name) {
         // разбиваем собщение на части
@@ -102,9 +107,10 @@ public class MyServer {
 
     /**
      * Мептод отправляет сообщение заданному списку клиентов
+     *
      * @param splitMessage сообщение, разбитое на части
-     * @param name имя отправителя
-     * @param nicknames список получателей сообщения
+     * @param name         имя отправителя
+     * @param nicknames    список получателей сообщения
      */
     public synchronized void sendToGroup(List<String> splitMessage, String name, List<String> nicknames) {
 //        сначала сделал так
@@ -113,10 +119,13 @@ public class MyServer {
 //        for (int i = nicknames.size() + 1; i < splitMessage.size(); i++) {
 //            message.append(" ").append(splitMessage.get(i));
 //        }
-        String message = "[" + name + "]: " + splitMessage.stream().skip(nicknames.size() + 1).collect(Collectors.joining(" "));
+        String message = "[" + name + "]: " +
+                splitMessage.stream()
+                        .skip(nicknames.size() + 1)
+                        .collect(Collectors.joining(" "));
         clients.stream()
                 .filter(c -> nicknames.contains(c.getName()))
-                .forEach(c -> c.sendMsg(message.toString()));
+                .forEach(c -> c.sendMsg(message));
     }
 
     public synchronized void broadcastClients() {
